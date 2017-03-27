@@ -20,3 +20,12 @@ Route::post('user',[
 Route::post('user/signin',[
     'uses'=> 'UserController@signIn'
 ]);
+route::get('users',[
+   'uses'=> 'UserController@index'
+]);
+route::get('user/{id}',[
+    'uses'=> 'UserController@show'
+]);
+route::patch('user/{id}',[
+    'uses'=> 'UserController@update'
+]);

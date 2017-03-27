@@ -8,7 +8,28 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
-    //
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $users = array();
+        $all_users = User::all();
+        foreach ($all_users as $user ){
+            array_push($users, $user->user_name);
+        }
+        return response()->json($users,200);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function signUp(Request $request)
     {
         $this->validate($request, [
@@ -24,15 +45,19 @@ class UserController extends Controller
             'password' =>bcrypt($request->input('password'))
         ]);
         $user->save();
-        return response()->json([
-            'Message' => 'User Created!'
-        ],201);
+        return response()->json(['message' => 'User Created!'],201);
     }
 
+    /**
+     * Display the specified resource to authenticate it.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function signIn(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required'
         ]);
         $credentials = $request->only('email', 'password');
@@ -51,4 +76,48 @@ class UserController extends Controller
             'token' => $token
         ], 200);
     }
+    /**
+     * Display the specified resource.
+     *
+     * @param User->user_name $user_name
+     * @return \Illuminate\Http\Response
+     */
+    public function show($user_name)
+    {
+        $user = User::find($user_name);
+        if(!$user){
+            return response()->json(['message' => 'User not Found'], 401);
+        }
+        return response()->json([
+            'name' => $user->name,
+            'user_name' => $user->user_name,
+            'email' => $user->email
+        ],200);
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  User->id $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'user_name' => 'required|unique:users',
+            'password' => 'required'
+        ]);
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'User not Found!'],404);
+        }
+        $user->user_name = $request->input('user_name');
+        $user->name = $request->input('name');
+        $user->password = bcrypt($request->input('password'));
+        $user->save();
+        return response()->json(['message'=>'User updated'],200);
+    }
+
+
 }
