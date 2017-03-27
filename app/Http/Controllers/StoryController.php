@@ -16,7 +16,12 @@ class StoryController extends Controller
      */
     public function index()
     {
+        $stories = Story::all();
+        $response = [
+            'stories'=>$stories
+        ];
 
+        return response()->json($response,200);
     }
 
     /**
@@ -53,12 +58,24 @@ class StoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Story  $story
+     * @param  story id
      * @return \Illuminate\Http\Response
      */
-    public function show(Story $story)
+    public function show($id)
     {
-        //
+        $story = Story::find($id);
+        if(!$story){
+            return response()->json(['message' => 'Story not Found'], 401);
+        }
+        $comments = [
+            'comments' => $story->comments
+        ];
+        return response()->json([
+            'id'=>$story->id,
+            'video_url' => $story->video_url,
+            'language' => $story->language,
+            $comments
+        ],200);
     }
 
     /**
@@ -92,6 +109,6 @@ class StoryController extends Controller
      */
     public function destroy(Story $story)
     {
-        //
+
     }
 }

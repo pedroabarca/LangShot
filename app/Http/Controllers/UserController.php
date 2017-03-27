@@ -21,6 +21,7 @@ class UserController extends Controller
         foreach ($all_users as $user ){
             array_push($users, $user->user_name);
         }
+
         return response()->json($users,200);
     }
 
@@ -89,10 +90,15 @@ class UserController extends Controller
         if(!$user){
             return response()->json(['message' => 'User not Found'], 401);
         }
+        $user_stories = [
+            'stories' => $user->stories
+        ];
         return response()->json([
+            'id'=>$user->id,
             'name' => $user->name,
             'user_name' => $user->user_name,
-            'email' => $user->email
+            'email' => $user->email,
+            $user_stories
         ],200);
     }
     /**
