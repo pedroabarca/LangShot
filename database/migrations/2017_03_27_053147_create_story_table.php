@@ -14,10 +14,10 @@ class CreateStoryTable extends Migration
     public function up()
     {
         Schema::create('stories', function (Blueprint $table) {
-            $table->string('url');
+            $table->string('video_url');
             $table->increments('id');
             $table->integer('user_id');
-            $table->integer('language_id');
+            $table->string('language');
             $table->timestamps();
         });
     }

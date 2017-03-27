@@ -12,6 +12,22 @@ class Story extends Model
      * @var array
      */
     protected $fillable = [
-        'url','user_id','language_id',
+        'video_url','user_id','language',
     ];
+
+    /**
+     * Get the Story's comments.
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Comment');
+    }
+
+    /**
+     * Get the User that owns the story.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

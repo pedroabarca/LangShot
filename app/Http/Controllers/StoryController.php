@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Story;
 use App\User;
 use Illuminate\Http\Request;
+use JWTAuth;
 
 class StoryController extends Controller
 {
@@ -15,7 +16,7 @@ class StoryController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -36,11 +37,15 @@ class StoryController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User();
+        $this->validate($request, [
+            'video_url' => 'required',
+            'language' => 'required'
+        ]);
+        $user = JWTAuth::parseToken()->toUser();
         $story = new Story();
-        $story->url = $request->input('url');
+        $story->video_url = $request->input('video_url');
+        $story->language = $request->input('language');
         $story->user_id = $user->id;
-       // $story->language_id = language->id;
         $story->save();
         return response()->json(['story' => $story], 201);
     }
