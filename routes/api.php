@@ -23,7 +23,7 @@ Route::post('user/signin',[
 route::get('users',[
    'uses'=> 'UserController@index'
 ]);
-route::get('user/{id}',[
+route::get('user/{user_name}',[
     'uses'=> 'UserController@show'
 ]);
 route::patch('user/{id}',[

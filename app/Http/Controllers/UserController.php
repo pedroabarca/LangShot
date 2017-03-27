@@ -84,7 +84,8 @@ class UserController extends Controller
      */
     public function show($user_name)
     {
-        $user = User::find($user_name);
+
+        $user = User::where('user_name', '=', $user_name)->first();
         if(!$user){
             return response()->json(['message' => 'User not Found'], 401);
         }
