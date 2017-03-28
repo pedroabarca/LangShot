@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//story
+Route::delete('story/{id}',[
+    'uses'=> 'StoryController@destroy',
+    'middleware' => 'jwt_auth'
+]);
+
 Route::get('story/{id}',[
     'uses'=> 'StoryController@show',
     'middleware' => 'jwt_auth'
@@ -27,6 +33,18 @@ Route::get('story',[
     'middleware' => 'jwt_auth'
 ]);
 
+//comment
+Route::post('comment',[
+    'uses'=> 'CommentController@store',
+    'middleware' => 'jwt_auth'
+]);
+
+Route::patch('comment/{id}',[
+    'uses'=> 'CommentController@update',
+    'middleware' => 'jwt_auth'
+]);
+
+//user
 Route::post('user',[
     'uses'=> 'UserController@signUp'
 ]);

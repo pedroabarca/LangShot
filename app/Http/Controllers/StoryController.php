@@ -104,11 +104,21 @@ class StoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Story  $story
+     * @param  story id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Story $story)
+    public function destroy($id)
     {
+        $user = JWTAuth::parseToken()->toUser();
+        $story = Story::find($id);
+        if(!$story){
+            return response()->json(['message' => 'Story not Found!'], 401);
+        }elseif ($story->user_id == $user->id) {
+            $story->delete();
+            return response()->json(['message' => 'Story Deleted!'], 200);
+        }else{
+            return response()->json(['message'=>'You must be the Owner!'],400);
 
+        }
     }
 }
