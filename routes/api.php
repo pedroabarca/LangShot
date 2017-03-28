@@ -44,6 +44,11 @@ Route::patch('comment/{id}',[
     'middleware' => 'jwt_auth'
 ]);
 
+Route::delete('comment/{id}',[
+    'uses'=> 'CommentController@destroy',
+    'middleware' => 'jwt_auth'
+]);
+
 //user
 Route::post('user',[
     'uses'=> 'UserController@signUp'

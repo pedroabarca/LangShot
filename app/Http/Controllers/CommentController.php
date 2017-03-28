@@ -111,6 +111,16 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
+        $user = JWTAuth::parseToken()->toUser();
+        $comment = Story::find($id);
+        if (!$comment) {
+            return response()->json(['message' => 'Story not Found!'], 401);
+        } elseif ($comment->user_id == $user->id) {
+            $comment->delete();
+            return response()->json(['message' => 'Story Deleted!'], 200);
+        } else {
+            return response()->json(['message' => 'You must be the Owner!'], 400);
 
+        }
     }
 }
